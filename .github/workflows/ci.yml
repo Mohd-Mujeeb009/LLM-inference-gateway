@@ -9,6 +9,6 @@ jobs:
         with: {python-version: '3.12', cache: pip}
       - run: pip install -e '.[dev]'
       - run: ruff check .
-      - run: mypy app || true # strict report remains visible while provider persistence seams evolve
-      - run: pytest -q
+      - run: mypy app
+      - run: pytest --cov=app --cov-report=term-missing --cov-fail-under=85
       - run: docker build .
