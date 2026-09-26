@@ -1,0 +1,7 @@
+models:
+  llama-3.3-70b: [groq, azure_openai]
+  gpt-4o-mini: [openai, azure_openai]
+providers:
+  groq: {timeout_seconds: 10}
+  openai: {timeout_seconds: 15}
+  azure_openai: {timeout_seconds: 15}
