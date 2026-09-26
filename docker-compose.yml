@@ -1,0 +1,22 @@
+services:
+  gateway:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      GATEWAY_API_KEYS: gw_demo_key
+    depends_on: [redis, postgres]
+  redis:
+    image: redis/redis-stack-server:7.4.0-v2
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: gateway
+      POSTGRES_PASSWORD: gateway
+      POSTGRES_DB: gateway
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    ports: ["9090:9090"]
+    volumes: ["./deploy/prometheus.yml:/etc/prometheus/prometheus.yml:ro"]
+  grafana:
+    image: grafana/grafana:11.3.1
+    ports: ["3000:3000"]
