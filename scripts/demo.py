@@ -4,7 +4,10 @@ import urllib.request
 
 BASE = "http://localhost:8000"
 HEADERS = {"Authorization": "Bearer gw_demo_key", "Content-Type": "application/json"}
-BODY = {"model": "llama-3.3-70b", "messages": [{"role": "user", "content": "Explain a circuit breaker in two lines"}]}
+BODY = {
+    "model": "llama-3.3-70b",
+    "messages": [{"role": "user", "content": "Explain a circuit breaker in two lines"}],
+}
 
 
 def call(path: str, body: dict | None = None) -> tuple[int, dict, dict]:
@@ -19,6 +22,10 @@ def call(path: str, body: dict | None = None) -> tuple[int, dict, dict]:
 
 for label in ("Normal request", "Identical prompt (cache hit)"):
     status, headers, payload = call("/v1/chat/completions", BODY)
-    print(f"{label:30} {status} provider={headers.get('X-Provider')} cache={headers.get('X-Cache')}")
+    print(
+        f"{label:30} {status} provider={headers.get('X-Provider')} cache={headers.get('X-Cache')}"
+    )
 status, _, payload = call("/v1/usage")
-print(f"Usage report                   {status} {payload['requests']} requests, {payload['tokens']} tokens")
+print(
+    f"Usage report                   {status} {payload['requests']} requests, {payload['tokens']} tokens"
+)
