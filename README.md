@@ -1,5 +1,8 @@
 # LLM Inference Gateway
 
+[![CI](https://github.com/Mohd-Mujeeb009/LLM-inference-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/Mohd-Mujeeb009/LLM-inference-gateway/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Mohd-Mujeeb009/LLM-inference-gateway/actions/workflows/codeql.yml/badge.svg)](https://github.com/Mohd-Mujeeb009/LLM-inference-gateway/actions/workflows/codeql.yml)
+
 A runnable OpenAI-compatible FastAPI gateway focused on reliability: authentication, token-bucket quotas, caching, ordered provider fallback, per-provider circuit breakers, SSE streaming, usage accounting, Prometheus metrics, Docker, and CI.
 
 ## Quick start
