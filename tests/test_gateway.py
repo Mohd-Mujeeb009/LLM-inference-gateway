@@ -2,7 +2,14 @@ import asyncio
 
 from fastapi.testclient import TestClient
 
-from app.core import CircuitBreaker, CircuitState, MockProvider, Router, SemanticCache, TokenBucketLimiter
+from app.core import (
+    CircuitBreaker,
+    CircuitState,
+    MockProvider,
+    Router,
+    SemanticCache,
+    TokenBucketLimiter,
+)
 from app.main import app
 from app.schemas import ChatRequest, Message
 
@@ -11,16 +18,29 @@ def test_chat_cache_and_auth() -> None:
     with TestClient(app) as client:
         body = {"model": "llama-3.3-70b", "messages": [{"role": "user", "content": "hello"}]}
         assert client.post("/v1/chat/completions", json=body).status_code == 401
-        first = client.post("/v1/chat/completions", json=body, headers={"Authorization": "Bearer gw_demo_key"})
-        second = client.post("/v1/chat/completions", json=body, headers={"Authorization": "Bearer gw_demo_key"})
+        first = client.post(
+            "/v1/chat/completions", json=body, headers={"Authorization": "Bearer gw_demo_key"}
+        )
+        second = client.post(
+            "/v1/chat/completions", json=body, headers={"Authorization": "Bearer gw_demo_key"}
+        )
         assert first.status_code == 200 and first.headers["X-Cache"] == "MISS"
         assert second.status_code == 200 and second.headers["X-Cache"] == "HIT"
 
 
 def test_openai_stream_contract() -> None:
     with TestClient(app) as client:
-        body = {"model": "llama-3.3-70b", "messages": [{"role": "user", "content": "stream me"}], "stream": True}
-        with client.stream("POST", "/v1/chat/completions", json=body, headers={"Authorization": "Bearer gw_demo_key"}) as response:
+        body = {
+            "model": "llama-3.3-70b",
+            "messages": [{"role": "user", "content": "stream me"}],
+            "stream": True,
+        }
+        with client.stream(
+            "POST",
+            "/v1/chat/completions",
+            json=body,
+            headers={"Authorization": "Bearer gw_demo_key"},
+        ) as response:
             text = "".join(response.iter_text())
         assert response.status_code == 200 and "data: [DONE]" in text
 
